@@ -1,4 +1,4 @@
-obj-m += src/ 
+obj-m += gpio.o
 SRC := $(shell pwd)
 
 all:
