@@ -1,0 +1,17 @@
+#! /bin/sh
+set -e
+
+case "$1" in
+    start)
+        echo "loading gpio"
+        start-stop-daemon -S -n gpio
+        ;;
+    stop)
+        echo "unloading gpio"
+        start-stop-daemon -K -n gpio
+        ;;
+    *)
+        echo "Usage: $0 {start|stop}
+        exit 1
+esac
+exit 0
