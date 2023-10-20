@@ -55,23 +55,23 @@ int __init ecearpi_module_init(void) {
         goto z_device_uncreate;
     }
 
-    if (gpio_is_valid(PIN_3) == 0) {
-        printk(KERN_ERR "PIN %d is not valid\n", PIN_3);
+    if (gpio_is_valid(PIN_16) == 0) {
+        printk(KERN_ERR "PIN %d is not valid\n", PIN_16);
         goto z_device_uncreate;
     }
 
-    result = gpio_request(PIN_3, "PIN_3");
+    result = gpio_request(PIN_16, "PIN_16");
     if (result < 0) {
-        printk(KERN_ERR "gpio_request for pin %d failed\n", PIN_3);
+        printk(KERN_ERR "gpio_request for pin %d failed\n", PIN_16);
         goto z_gpio_release;
     }
-    gpio_direction_output(PIN_3, 0);
-    gpio_export(PIN_3, 0);
+    gpio_direction_output(PIN_16, 0);
+    gpio_export(PIN_16, 0);
 
     return 0;
 
     z_gpio_release:
-        gpio_free(PIN_3);
+        gpio_free(PIN_16);
     z_device_uncreate:
         device_destroy(ecearpi_class, ecearpi_device);
     z_class_uncreate:
@@ -86,8 +86,8 @@ int __init ecearpi_module_init(void) {
 
 void __exit ecearpi_module_exit(void) {
     printk(KERN_INFO "ecearpi_module_exit\n");
-    gpio_unexport(PIN_3);
-    gpio_free(PIN_3);
+    gpio_unexport(PIN_16);
+    gpio_free(PIN_16);
     device_destroy(ecearpi_class, ecearpi_device);
     class_destroy(ecearpi_class);
     cdev_del(&ecearpi_cdev);
@@ -105,7 +105,7 @@ int ecearpi_module_release(struct inode *inode, struct file *file) {
 }
 
 ssize_t ecearpi_module_read(struct file *filp, char __user *buf, size_t len, loff_t *off) {
-    uint8_t pin_state = gpio_get_value(PIN_3);
+    uint8_t pin_state = gpio_get_value(PIN_16);
     printk(KERN_INFO "ecearpi_module_read\n");
 
     if (copy_to_user(buf, &pin_state, sizeof(uint8_t)) > 0) {
@@ -124,9 +124,9 @@ ssize_t ecearpi_module_write(struct file *filp, const char __user *buf, size_t l
     }
 
     if (usr_buf[0] == '1') {
-        gpio_set_value(PIN_3, 1);
+        gpio_set_value(PIN_16, 1);
     } else if (usr_buf[0] == '0') {
-        gpio_set_value(PIN_3, 0);
+        gpio_set_value(PIN_16, 0);
     } else {
         printk(KERN_WARNING "ecearpi_module_write: unknown command received %s\n", usr_buf);
     }

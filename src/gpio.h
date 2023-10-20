@@ -4,7 +4,7 @@
 
 enum PINS
 {
-    PIN_3 = 3,
+    PIN_16 = 16,
 };
 
 int __init ecearpi_module_init(void);
